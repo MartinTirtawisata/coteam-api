@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
+import {DATABASE_URL, PORT} from './config';
 
 const cors = require('cors');
 const {CLIENT_ORIGIN} = require('./config');
