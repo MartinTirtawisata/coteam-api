@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: dU+MOW/M78dPNuPzyuBB2wHi6uDRgOP5teqANGrh3myMlD1aZNe24JPXTxpKRCmpa36zyxEkfhYQ2lEFq1hmOHReHcDSzAqEryGrq5kBQb05zcw4r1/vMqi0NHdO9egP/5Tgy/BQzvvXL8PksoT58OoTNov+9Gl1xqAePvmsPiBET9veT/Hf9q/ygzf+ayYbviNu0LD7ic1WfRoOPM5GG8SbAz7zYkplqfWEnpx/bK1dCELVzcI0JqUPISkdXc2rFMZT/guW/KV0x5TZyvzB7igJVtw0GcCRTuYResQCzxHLht4SsBwh+LzEpXmTwXy2AgzdRPClPDhqmyUaRtcTL3jHp+mSRhfY6eiRLkx6t7YTifMgvqbY5am5NEtgT8eV/0fr1lmoo6hTdfuM0LrY1BhCt/PgmZuu2oUWZ95jmbVFtfbrXgj1RioEcZT1Uyu/k+aZSSUmteqoxCfXWHQ5/G6IxsfSKzggjSygcTdNELL/8+AneIg+/mrZn9CCuUMOhZ0hfky0c2U6GubZOHbLxJ6TewlNZZ+XiZbwvv7ycBgmCobHJFmKIrHV/87GX7N0sbcFOamDZjUGoI62wdiCrpu+u6VGo5OYvKNhR5h2ZhpOECqMQY/qkJhXWOcm0nh2hdxaIpqycWdoHxhCYSAhLQpl0s7EtIOhXgU7MV2aoWs=
+  app: rocky-castle-33666
+  on:
+    repo: MartinTirtawisata/coteam-api
