@@ -1,13 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-import {DATABASE_URL, PORT} from './config';
-
-const cors = require('cors');
-const {CLIENT_ORIGIN} = require('./config');
+const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
+const socialCardRouter = require('./router/socialCardRouter');
 
 app.use(
     cors({
@@ -15,9 +14,13 @@ app.use(
     })
 );
 
-app.get('/api/*', (req, res) => {
-res.json({ok: true});
-});
+app.use('/api', socialCardRouter);
+
+// app.get('/api/*', (req, res) => {
+// res.json(userInfo);
+// });
+
+const PORT = 8080;
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
