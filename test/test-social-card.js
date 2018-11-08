@@ -15,7 +15,7 @@ function generateSocialCardData(){
         first_name: faker.lorem.words(),
         last_name: faker.lorem.words(),
         job_title: faker.lorem.words(),
-        exprience: faker.lorem.words(),
+        experience: faker.lorem.words(),
         interest: faker.lorem.words(),
         personality: faker.lorem.words(),
         skill: faker.lorem.words(),
@@ -29,7 +29,7 @@ function seedSocialCardData(){
     for (let i=0; i < 5; i++){
         socialCardData.push(generateSocialCardData())
     }
-
+    // console.log(socialCardData);
     return SocialCard.insertMany(socialCardData);
 }
 
@@ -57,57 +57,44 @@ describe('API route testing for Social Card', function(){
 
     describe('GET endpoint for social card', function(){
         it('should retrieve one social card', function(){
-            let res
+            let res;
             return chai.request(app).get('/api/social-card').then(_res => {
                 res = _res
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.lengthOf.at.least(1);
-                return socialCardCount.count()
+                return SocialCard.countDocuments()
             }).then(count => {
                 expect(res.body).to.have.lengthOf(count);
-            }).catch(err => {
-                console.error(err);
-                res.status(500).json({error: err});
             })
         })
     })
 
     describe('POST endpoints for social card', function(){
-        let newSocialCard = {
-            first_name: "Marco",
-            last_name: "Polo",
-            job_title: "software engineer",
-            experience: ["Rebelworks","Bjames"],
-            interest: "I like basketball and gaming",
-            personality: "Introvert",
-            skill: ["React","Node"],
-            thought: "teamwork is awesome"
-        };
+        it('should add new social card', () => {
+            const newSocialCard = generateSocialCardData();
+            return chai.request(app).post('/api/social-card').send(newSocialCard).then(res => {
+                expect(res).to.have.status(201);
+                expect(res).to.be.json;
+                expect(res).to.be.a('object');
+                expect(res.body).to.include.keys(['first_name','last_name','job_title','experience','interest','personality','skill','thought']);
+                expect(res.body.first_name).to.equal(newSocialCard.first_name);
+                expect(res.body.last_name).to.equal(newSocialCard.last_name);
+                expect(res.body.job_title).to.equal(newSocialCard.job_title);
+                expect(res.body.experience).to.equal(newSocialCard.experience);
+                expect(res.body.interest).to.equal(newSocialCard.interest);
+                expect(res.body.personality).to.equal(newSocialCard.personality);
+                expect(res.body.skill).to.equal(newSocialCard.skill);
 
-        return chai.request(app).post('/api/social-card').send(newSocialCard).then(res => {
-            expect(res).to.have.status(201);
-            expect(res).to.be.json;
-            expect(res).to.be.a('object');
-            expect(res.body).to.include.keys(['first_name','last_name','job_title','experience','interest','personality','skill','thought']);
-            expect(res.body.first_name).to.equal(newSocialCard.first_name);
-            expect(res.body.last_name).to.equal(newSocialCard.last_name);
-            expect(res.body.job_title).to.equal(newSocialCard.job_title);
-            expect(res.body.experience).to.equal(newSocialCard.experience);
-            expect(res.body.interest).to.equal(newSocialCard.interest);
-            expect(res.body.personality).to.equal(newSocialCard.personality);
-            expect(res.body.skill).to.equal(newSocialCard.skill);
-            return SocialCard.findById(res.body._id)
-        }).then(card => {
-            expect(card.first_name).to.equal(newSocialCard.first_name);
-            expect(card.last_name).to.equal(newSocialCard.last_name);
-            expect(card.job_title).to.equal(newSocialCard.job_title);
-            expect(card.experience).to.equal(newSocialCard.experience);
-            expect(card.interest).to.equal(newSocialCard.interest);
-            expect(card.personality).to.equal(newSocialCard.personality);
-            expect(card.skill).to.equal(newSocialCard.skill);
-        }).catch(err => {
-            console.error(err);
-            res.status(500).json({error: err})
+                return SocialCard.findById(res.body._id)
+            }).then(cards => {
+                expect(cards.first_name).to.equal(newSocialCard.first_name);
+                expect(cards.last_name).to.equal(newSocialCard.last_name);
+                expect(cards.job_title).to.equal(newSocialCard.job_title);
+                expect(cards.experience).to.equal(newSocialCard.experience);
+                expect(cards.interest).to.equal(newSocialCard.interest);
+                expect(cards.personality).to.equal(newSocialCard.personality);
+                expect(cards.skill).to.equal(newSocialCard.skill);
+            });
         });
     });
 
@@ -117,40 +104,33 @@ describe('API route testing for Social Card', function(){
                 experience: "B James",
                 skill: "Nodejs"
             };
-
+            
             SocialCard.findOne().then(card => {
                 updateSocialCard.id = card._id
+                let res;
 
-                return chai.request(app).put('/api/social-card').send(updateSocialCard).then(res => {
+                return chai.request(app).put(`/api/social-card/${updateSocialCard.id}`).send(updateSocialCard).then(() => {
                     expect(res).to.have.status(204);
-                    expect(res).to.be.a.json;
-                    expect(res.body.experience).to.equal(updateSocialCard.experience);
-                    expect(res.body.skill).to.equal(updateSocialCard.skill);
                     return SocialCard.findById(updateSocialCard.id)
                 }).then(card => {
                     expect(card.experience).to.equal(res.body.experience);
                     expect(card.skill).to.equal(res.body.skill);
-                    expect(card.id).to.equal(res.body._id);
-                }).catch(err => {
-                    console.error(err);
-                    res.status(500).json({error: err});
                 });
             });
         });
     });
 
-    describe('DELETE endpoint for social card', () => {
+    describe('DELETE endpoint for social card', function(){
         it('should delete social card and db = null', () => {
             SocialCard.findOne(card => {
+                console.log('card should be here')
+                console.log(card);
                 let cardId = card._id
                 return chai.request(app).delete(`/api/social-card/${cardId}`).then(res => {
                     expect(res).to.have.status(204);
                     return SocialCard.findById(cardId);
                 }).then(card => {
                     expect(card).to.be.null
-                }).catch(err => {
-                    console.error(err);
-                    res.status(500).json({error: err})
                 })
             });
         });

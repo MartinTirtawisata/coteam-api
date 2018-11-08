@@ -19,12 +19,11 @@ const socialCardInfo = {
 
 // GET socialCard
 router.get('/', jsonParser, (req, res) => {
-    // res.json(socialCardInfo)
-    SocialCard.find().then(card => {
-        res.json(card);
+    SocialCard.find().then(cards => {
+        res.json(cards.map(card => card.serialize()));
     }).catch(err => {
-        console.log(err);
-        res.status(400).json({message: err})
+        console.error(err);
+        res.status(500).json({message: "Something went wrong"})
     })
 })
 
@@ -34,8 +33,8 @@ router.post('/', jsonParser, (req, res) => {
     requiredFields.forEach(field => {
         if (!(field in req.body)){
             let message = `the ${field} is missing`;
-            console.log(message);
-            res.status(400).json({error: message})
+            console.error(message);
+            return res.status(400).send(message);
         }
     });
 
@@ -48,37 +47,43 @@ router.post('/', jsonParser, (req, res) => {
         personality: req.body.personality,
         skill: req.body.skill,
         thought: req.body.thought
+    }).then(cards => res.status(201).json(cards.serialize()))
+    .catch( err => {
+        console.error(err);
+        res.status(500).json({error: "Something went wrong"})
     })
-
-    res.status(201).end()
 })
 
 // Update a social card
 router.put('/:id', jsonParser, (req, res)=> {
-    socialCardUpdate = {};
-    fieldsToUpdate = ['job_title', 'experience','interest','peronality','skill','thought'];
+    if (!(req.params.id && req.body.id && req.params.id === req.body.id)){
+        res.status(400).json({message: "Request path id and request body id values must match"});
+    }
+
+    const socialCardUpdate = {};
+    const fieldsToUpdate = ['job_title', 'experience','interest','peronality','skill','thought'];
     fieldsToUpdate.forEach(field => {
         if (field in req.body){
             socialCardUpdate[field] = req.body[field];
         };
     });
 
-    SocialCard.findByIdAndUpdate(req.params.id, {$set: socialCardUpdate}).then(card => {
-        res.status(203).json(card).end();
+    SocialCard.findByIdAndUpdate(req.params.id, {$set: socialCardUpdate}).then(updatedCard => {
+        res.status(204).json(updatedCard).end();
     }).catch(err => {
         console.log(err);
-        res.status(500).json({error: err});
+        res.status(500).json({message: 'something went wrong'});
     })
 })
 
 // Delete a social card
 router.delete('/:id', jsonParser, (req, res) => {
-    SocialCard.findByIdAndRemove(req.params.id).then(card => {
-        res.status(204).end()
+    SocialCard.findByIdAndRemove(req.params.id).then(() => {
+        res.status(204).json({message: "Delete successful"})
     }).catch(err => {
-        console.log(err);
-        res.status(500).json({error: err});
-    })
-})
+        console.error(err);
+        res.status(500).json({error: 'Something went wrong'});
+    });
+});
 
 module.exports = router;
