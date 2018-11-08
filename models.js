@@ -1,5 +1,5 @@
 'use strict';
-const bycrpt = require('bycrpt');
+// const bycrpt = require('bycrpt');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
@@ -9,7 +9,7 @@ mongoose.Promise = global.Promise;
 const socialCardSchema = mongoose.Schema({
     // Connect to user
     first_name: "string",
-    last_name: 'user',
+    last_name: 'string',
     job_title: 'string',
     experience: 'string',
     interest: 'string',

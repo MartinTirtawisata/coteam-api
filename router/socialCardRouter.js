@@ -19,6 +19,7 @@ const socialCardInfo = {
 
 // GET socialCard
 router.get('/', jsonParser, (req, res) => {
+    // res.json(socialCardInfo)
     SocialCard.find().then(card => {
         res.json(card);
     }).catch(err => {
@@ -29,7 +30,7 @@ router.get('/', jsonParser, (req, res) => {
 
 // Create a new social card
 router.post('/', jsonParser, (req, res) => {
-    const requiredFields = ['job_title', 'experience','interest','peronality','skill','thought'];
+    const requiredFields = ['job_title', 'experience','interest','personality','skill','thought'];
     requiredFields.forEach(field => {
         if (!(field in req.body)){
             let message = `the ${field} is missing`;
@@ -48,10 +49,12 @@ router.post('/', jsonParser, (req, res) => {
         skill: req.body.skill,
         thought: req.body.thought
     })
+
+    res.status(201).end()
 })
 
 // Update a social card
-router.put('/', jsonParser, (req, res)=> {
+router.put('/:id', jsonParser, (req, res)=> {
     socialCardUpdate = {};
     fieldsToUpdate = ['job_title', 'experience','interest','peronality','skill','thought'];
     fieldsToUpdate.forEach(field => {
@@ -60,9 +63,22 @@ router.put('/', jsonParser, (req, res)=> {
         };
     });
 
-    
+    SocialCard.findByIdAndUpdate(req.params.id, {$set: socialCardUpdate}).then(card => {
+        res.status(203).json(card).end();
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
+    })
 })
 
 // Delete a social card
+router.delete('/:id', jsonParser, (req, res) => {
+    SocialCard.findByIdAndRemove(req.params.id).then(card => {
+        res.status(204).end()
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
+    })
+})
 
 module.exports = router;

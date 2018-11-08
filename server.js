@@ -24,6 +24,42 @@ app.use('/api/social-card', socialCardRouter);
 
 const PORT = 8080;
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+let server;
 
-module.exports = {app};
+function runServer(database_url, port = PORT){
+    return new Promise((resolve, reject) => {
+        mongoose.connect(database_url, {useNewUrlParser: true}, err => {
+            if (err){
+                return reject(err);
+            }
+
+            server = app.listen(port, () => {
+                console.log(`You are listening on port ${port}`)
+                resolve();
+            }).on('error', function(err){
+                mongoose.disconnect();
+                reject(err);
+            })
+        })
+    })
+}
+
+function closeServer(){
+    return mongoose.disconnect().then(function(){
+        return new Promise((resolve, reject) => {
+            console.log('closing server');
+            server.close(function(err){
+                if(err){
+                    return reject(err);
+                }
+                resolve();
+            })
+        })
+    })
+}
+
+if (require.main === module){
+    runServer(DATABASE_URL).catch(err => console.error(err));
+}
+
+module.exports = {app, runServer, closeServer};
