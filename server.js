@@ -7,6 +7,7 @@ mongoose.Promise = global.Promise;
 
 const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
 const socialCardRouter = require('./router/socialCardRouter');
+const surveyRouter = require('./router/surveyRouter');
 // const userRegistration = require('./users/usersRouter')
 
 app.use(
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use('/api/social-card', socialCardRouter);
+app.use('/api/survey', surveyRouter);
 // app.use('/api/register', userRegistration);
 
 // app.get('/api/*', (req, res) => {

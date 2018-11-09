@@ -7,15 +7,14 @@ mongoose.Promise = global.Promise;
 
 // socialCardSchema
 const socialCardSchema = mongoose.Schema({
-    // Connect to user
-    first_name: "string",
-    last_name: 'string',
-    job_title: 'string',
-    experience: 'string',
-    interest: 'string',
-    personality: 'string',
-    skill: 'string',
-    thought: 'string',
+    first_name: String,
+    last_name: String,
+    job_title: String,
+    experience: String,
+    interest: String,
+    personality: String,
+    skill: String,
+    thought: String,
     createdAt: {type: Date, default: Date.now}
 });
 
@@ -36,6 +35,24 @@ socialCardSchema.methods.serialize = function(){
     }
 }
 
-const SocialCard = mongoose.model('SocialCard', socialCardSchema);
+const userInputSchema = mongoose.Schema({input: String})
 
-module.exports = {SocialCard}
+const questionSchema = mongoose.Schema({question: String})
+
+const surveySchema = mongoose.Schema({
+    userQuestions: [questionSchema],
+    userInputs: [userInputSchema]
+})
+
+surveySchema.methods.serialize = function(){
+    return {
+        id: this._id,
+        userQuestions: this.userQuestions,
+        userInputs: this.userInputs
+    }
+}
+
+const SocialCard = mongoose.model('SocialCard', socialCardSchema);
+const Survey = mongoose.model('Survey', surveySchema);
+
+module.exports = {SocialCard, Survey}
