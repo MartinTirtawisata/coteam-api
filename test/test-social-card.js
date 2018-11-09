@@ -25,7 +25,7 @@ function generateSocialCardData(){
 }
 
 function seedSocialCardData(){
-    console.info('seeding product data');
+    console.info('seeding social card data');
     let socialCardData = [];
     for (let i=0; i < 5; i++){
         socialCardData.push(generateSocialCardData())

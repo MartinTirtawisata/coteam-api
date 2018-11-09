@@ -54,5 +54,7 @@ surveySchema.methods.serialize = function(){
 
 const SocialCard = mongoose.model('SocialCard', socialCardSchema);
 const Survey = mongoose.model('Survey', surveySchema);
+const UserInput = mongoose.model('UserInput', userInputSchema);
+const Question = mongoose.model('Question', questionSchema);
 
-module.exports = {SocialCard, Survey}
+module.exports = {SocialCard, Survey, UserInput, Question}
