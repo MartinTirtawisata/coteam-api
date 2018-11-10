@@ -1,13 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+const passport = require('passport');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-import {DATABASE_URL, PORT} from './config';
+const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
+const socialCardRouter = require('./router/socialCardRouter');
+const surveyRouter = require('./router/surveyRouter');
+const usersRouter = require('./users/usersRouter')
 
-const cors = require('cors');
-const {CLIENT_ORIGIN} = require('./config');
+const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
 
 app.use(
     cors({
@@ -15,10 +19,60 @@ app.use(
     })
 );
 
-app.get('/api/*', (req, res) => {
-res.json({ok: true});
-});
+passport.use(localStrategy);
+passport.use(jwtStrategy)
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+app.use('/api/social-card', socialCardRouter);
+app.use('/api/survey', surveyRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 
-module.exports = {app};
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+app.get('/api/protected', jwtAuth, (req, res) => {
+    return res.json({
+        data: 'rosebud'
+    });
+});  
+
+const PORT = 8080;
+
+let server;
+
+function runServer(database_url, port = PORT){
+    return new Promise((resolve, reject) => {
+        mongoose.connect(database_url, {useNewUrlParser: true}, err => {
+            if (err){
+                return reject(err);
+            }
+
+            server = app.listen(port, () => {
+                console.log(`You are listening on port ${port}`)
+                resolve();
+            }).on('error', function(err){
+                mongoose.disconnect();
+                reject(err);
+            })
+        })
+    })
+}
+
+function closeServer(){
+    return mongoose.disconnect().then(function(){
+        return new Promise((resolve, reject) => {
+            console.log('closing server');
+            server.close(function(err){
+                if(err){
+                    return reject(err);
+                }
+                resolve();
+            })
+        })
+    })
+}
+
+if (require.main === module){
+    runServer(DATABASE_URL).catch(err => console.error(err));
+}
+
+module.exports = {app, runServer, closeServer};
