@@ -12,9 +12,9 @@ const surveyQuestionData = {
     userInputs: ['8', '9']
 }
 
-const jwtAuth = passport.authenticate('jwt', {session: false});
+// const jwtAuth = passport.authenticate('jwt', {session: false});
 
-router.get('/',jwtAuth, jsonParser, (req, res) => {
+router.get('/', jsonParser, (req, res) => {
     res.status(200).json(surveyQuestionData);
     // Survey.find().then(surveys => {
     //     res.status(200).json(surveys.map(survey => {

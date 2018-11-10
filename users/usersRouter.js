@@ -7,12 +7,21 @@ const router = express.Router();
 
 const jsonParser = bodyParser.json();
 
-const userInfo = {
-    first_name: "Martin",
-    last_name: "Tirtawisata",
-    username: "martin@email.com",
-    password: "password",
-};
+// const userInfo = {
+//     first_name: "Martin",
+//     last_name: "Tirtawisata",
+//     username: "martin@email.com",
+//     password: "password",
+// };
+
+router.get('/', jsonParser, (req, res) => {
+    User.find().then(user => {
+        res.json(user);
+    }).catch(err => {
+        console.error(err);
+        res.status(400).json({message: "Internal service error"});
+    })
+})
 
 router.post('/register', jsonParser, (req, res) => {
     // 1) Check for missing field
@@ -30,18 +39,18 @@ router.post('/register', jsonParser, (req, res) => {
 
     // 2) Check for string fields
     const stringFields = ['username', 'password'];
-    const nonStringFields = stringFields.find(field => {
-        field in req.body && typeof req.body[field] !== 'string';
+    const nonStringField = stringFields.find(field => {
+        field in req.body && typeof req.body[field] !== 'string'
     });
 
-    if(nonStringFields){
+    if (nonStringField){
         return res.status(422).json({
             code: 422,
-            reason: "ValidationError",
+            reason: 'ValidationError',
             message: 'Incorrect field type: expected string',
-            location: nonStringFields
+            location: nonStringField
         });
-    };
+    }
     // 3) Trim whitespaces for username and passwords; users cannot have whitespace for credentials
     const trimmedFields = ['username', 'password'];
     // Need to find fields that are not trimmed to trigger error.
