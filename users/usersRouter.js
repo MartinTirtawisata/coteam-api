@@ -14,7 +14,7 @@ const userInfo = {
     password: "password",
 };
 
-router.post('/', jsonParser, (req, res) => {
+router.post('/register', jsonParser, (req, res) => {
     // 1) Check for missing field
     const requiredFields = ['username','password'];
     const missingField = requiredFields.find(field => !(field in req.body));

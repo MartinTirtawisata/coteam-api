@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const passport = require('passport');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -8,7 +9,7 @@ mongoose.Promise = global.Promise;
 const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
 const socialCardRouter = require('./router/socialCardRouter');
 const surveyRouter = require('./router/surveyRouter');
-const userRegistration = require('./users/usersRouter')
+const usersRouter = require('./users/usersRouter')
 
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
 
@@ -23,11 +24,16 @@ passport.use(jwtStrategy)
 
 app.use('/api/social-card', socialCardRouter);
 app.use('/api/survey', surveyRouter);
-app.use('/api/register', userRegistration);
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 
-// app.get('/api/*', (req, res) => {
-// res.json(userInfo);
-// });
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+app.get('/api/protected', jwtAuth, (req, res) => {
+    return res.json({
+        data: 'rosebud'
+    });
+});  
 
 const PORT = 8080;
 

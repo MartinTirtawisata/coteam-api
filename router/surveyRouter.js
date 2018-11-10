@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+const passport = require('passport');
 
 const {Survey} = require('../models');
 
@@ -11,7 +12,9 @@ const surveyQuestionData = {
     userInputs: ['8', '9']
 }
 
-router.get('/', jsonParser, (req, res) => {
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+router.get('/',jwtAuth, jsonParser, (req, res) => {
     res.status(200).json(surveyQuestionData);
     // Survey.find().then(surveys => {
     //     res.status(200).json(surveys.map(survey => {
