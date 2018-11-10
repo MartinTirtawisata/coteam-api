@@ -8,7 +8,9 @@ mongoose.Promise = global.Promise;
 const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
 const socialCardRouter = require('./router/socialCardRouter');
 const surveyRouter = require('./router/surveyRouter');
-// const userRegistration = require('./users/usersRouter')
+const userRegistration = require('./users/usersRouter')
+
+const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
 
 app.use(
     cors({
@@ -16,9 +18,12 @@ app.use(
     })
 );
 
+passport.use(localStrategy);
+passport.use(jwtStrategy)
+
 app.use('/api/social-card', socialCardRouter);
 app.use('/api/survey', surveyRouter);
-// app.use('/api/register', userRegistration);
+app.use('/api/register', userRegistration);
 
 // app.get('/api/*', (req, res) => {
 // res.json(userInfo);
