@@ -10,21 +10,22 @@ const socialCardInfo = {
     first_name: "Marco",
     last_name: "Polo",
     job_title: "software engineer",
-    experience: ["Rebelworks","Bjames"],
+    experience: "Rebelworks",
     interest: "I like basketball and gaming",
     personality: "Introvert",
-    skill: ["React","Node"],
+    skill: "React",
     thought: "teamwork is awesome"
 }
 
 // GET socialCard
 router.get('/', jsonParser, (req, res) => {
-    SocialCard.find().then(cards => {
-        res.json(cards.map(card => card.serialize()));
-    }).catch(err => {
-        console.error(err);
-        res.status(500).json({message: "Something went wrong"})
-    })
+    res.json(socialCardInfo);
+    // SocialCard.find().then(cards => {
+    //     res.json(cards.map(card => card.serialize()));
+    // }).catch(err => {
+    //     console.error(err);
+    //     res.status(500).json({message: "Something went wrong"})
+    // })
 })
 
 // Create a new social card

@@ -15,7 +15,17 @@ const surveyQuestionData = {
 // const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.get('/', jsonParser, (req, res) => {
-    res.status(200).json(surveyQuestionData);
+    res.json({
+        survey: [
+            {
+                question: "Question 1"
+            }, 
+            {
+                question: "Question 2"
+            }
+        ]
+    });
+    // res.status(200).json(surveyQuestionData);
     // Survey.find().then(surveys => {
     //     res.status(200).json(surveys.map(survey => {
     //         survey.serialize();

@@ -27,13 +27,13 @@ app.use('/api/survey', surveyRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
-const jwtAuth = passport.authenticate('jwt', {session: false});
+// const jwtAuth = passport.authenticate('jwt', {session: false});
 
-app.get('/api/protected', jwtAuth, (req, res) => {
-    return res.json({
-        data: 'rosebud'
-    });
-});  
+// app.get('/api/protected', jwtAuth, (req, res) => {
+//     return res.json({
+//         data: 'rosebud'
+//     });
+// });  
 
 const PORT = 8080;
 
