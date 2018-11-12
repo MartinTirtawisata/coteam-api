@@ -58,9 +58,11 @@ const UserInputSchema = mongoose.Schema({input: String})
 const QuestionSchema = mongoose.Schema({question: String})
 
 const SurveySchema = mongoose.Schema({
-    userQuestions: [QuestionSchema],
+    userQuestions: ,
     userInputs: [UserInputSchema]
 })
+
+// UserResults ref to quesiton and user
 
 SurveySchema.methods.serialize = function(){
     return {
