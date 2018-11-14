@@ -58,7 +58,7 @@ const UserInputSchema = mongoose.Schema({input: String})
 const QuestionSchema = mongoose.Schema({question: String})
 
 const SurveySchema = mongoose.Schema({
-    userQuestions: ,
+    userQuestions: [QuestionSchema],
     userInputs: [UserInputSchema]
 })
 
