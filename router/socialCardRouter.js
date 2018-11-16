@@ -48,7 +48,7 @@ router.post('/', jsonParser, (req, res) => {
                 last_name: req.body.last_name,
                 job_title: req.body.job_title,
                 experience: req.body.experience,
-                interest: req.body.interest,
+                interest: req.body.interest, 
                 personality: req.body.personality,
                 skill: req.body.skill,
                 thought: req.body.thought
@@ -68,7 +68,7 @@ router.put('/:id', jsonParser, (req, res)=> {
     }
 
     const socialCardUpdate = {};
-    const fieldsToUpdate = ['job_title', 'experience','interest','peronality','skill','thought'];
+    const fieldsToUpdate = ['first_name','last_name','job_title', 'experience','interest','peronality','skill','thought'];
     fieldsToUpdate.forEach(field => {
         if (field in req.body){
             socialCardUpdate[field] = req.body[field];

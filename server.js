@@ -31,8 +31,7 @@ app.use(function (req, res, next) {
 passport.use(localStrategy);
 passport.use(jwtStrategy)
 
-app.use('/api/social-card', socialCardRouter);
-app.use('/api/survey', surveyRouter);
+app.use('/api/card', socialCardRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 

@@ -25,14 +25,14 @@ UserSchema.statics.hashPassword = function(password){
 
 // socialCardSchema
 const SocialCardSchema = mongoose.Schema({
-    first_name: String,
-    last_name: String,
-    job_title: String,
-    experience: String,
-    interest: String,
-    personality: String,
-    skill: String,
-    thought: String,
+    first_name: {type: 'string'},
+    last_name: {type: 'string'},
+    job_title: {type: 'string'},
+    experience: {type: 'string'},
+    interest: {type: 'string'},
+    personality: {type: 'string'},
+    skill: {type: 'string'},
+    thought: {type: 'string'},
     createdAt: {type: Date, default: Date.now}
 });
 
@@ -43,12 +43,13 @@ SocialCardSchema.virtual('user').get(function(){
 SocialCardSchema.methods.serialize = function(){
     return {
         id: this._id,
-        user: this.username,
-        job_title: this.username,
+        first_name: this.first_name,
+        last_name: this.last_name,
+        job_title: this.job_title,
         experience: this.experience,
         interest: this.interest,
         personality: this.personality,
-        skill: this.personality,
+        skill: this.skill,
         thought: this.thought
     }
 }
