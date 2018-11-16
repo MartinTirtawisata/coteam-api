@@ -19,9 +19,8 @@ const socialCardInfo = {
 
 // GET socialCard
 router.get('/', jsonParser, (req, res) => {
-    // res.json(socialCardInfo);
-    SocialCard.findOne().then(cards => {
-        res.json(cards.serialize());
+    SocialCard.find().then(cards => {
+        res.json(cards)
     }).catch(err => {
         console.error(err);
         res.status(500).json({message: "Something went wrong"})
@@ -38,27 +37,20 @@ router.post('/', jsonParser, (req, res) => {
             return res.status(400).send(message);
         }
     });
-    SocialCard.findOne().then(card => {
-        console.log(card)
-        if (card !== null) {
-            res.status(400).json({message: "Social card already exists"})
-        } else {
-            SocialCard.create({
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                job_title: req.body.job_title,
-                experience: req.body.experience,
-                interest: req.body.interest, 
-                personality: req.body.personality,
-                skill: req.body.skill,
-                thought: req.body.thought
-            }).then(cards => res.status(201).json(cards.serialize())
-            ).catch( err => {
-                console.error(err);
-                res.status(500).json({error: "Something went wrong"})
-            })
-        }
-    }).catch(err => res.status(500).json({error: `Something went wrong: ${err}`}))
+    SocialCard.create({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        job_title: req.body.job_title,
+        experience: req.body.experience,
+        interest: req.body.interest, 
+        personality: req.body.personality,
+        skill: req.body.skill,
+        thought: req.body.thought
+    }).then(cards => res.status(201).json(cards.serialize())
+    ).catch( err => {
+        console.error(err);
+        res.status(500).json({error: "Something went wrong"})
+    })
 })
 
 // Update a social card
