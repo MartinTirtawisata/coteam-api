@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const {DATABASE_URL} = require('./config');
 app.use(cors({
-    origin: 'https://hidden-shelf-59966.herokuapp.com/ww' 
+    origin: 'https://hidden-shelf-59966.herokuapp.com/' 
 }));
 
 app.use(function (req, res, next) {
@@ -22,29 +22,15 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
 const socialCardRouter = require('./router/socialCardRouter');
 const usersRouter = require('./users/usersRouter')
-
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
-
-
-
 
 passport.use(localStrategy);
 passport.use(jwtStrategy)
-
 app.use('/api/card', socialCardRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
-
-// const jwtAuth = passport.authenticate('jwt', {session: false});
-
-// app.get('/api/protected', jwtAuth, (req, res) => {
-//     return res.json({
-//         data: 'rosebud'
-//     });
-// });  
 
 const PORT = 8080;
 
