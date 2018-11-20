@@ -9,3 +9,6 @@ deploy:
   app: rocky-castle-33666
   on:
     repo: MartinTirtawisata/coteam-api
+  env:
+    JWT_SECRET=SOME_SECRET_STRING
+    DATABASE_URL=mongodb://martin:martin3@ds151943.mlab.com:51943/coteam-api
