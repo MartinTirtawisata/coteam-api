@@ -57,9 +57,9 @@ describe('API route testing for Social Card', function(){
     })
 
     describe('GET endpoint for social card', function(){
-        it('should retrieve one social card', function(){
+        it('should retrieve all social card', function(){
             let res;
-            return chai.request(app).get('/api/social-card').then(_res => {
+            return chai.request(app).get('/api/card').then(_res => {
                 res = _res
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.lengthOf.at.least(1);
@@ -84,7 +84,7 @@ describe('API route testing for Social Card', function(){
                     created: faker.date.past()
             };
             // console.log(newSocialCard);
-            return chai.request(app).post('/api/social-card').send(newSocialCard).then(res => {
+            return chai.request(app).post('/api/card').send(newSocialCard).then(res => {
 
                 // console.log(res.body)
                 expect(res).to.have.status(201);
@@ -123,7 +123,7 @@ describe('API route testing for Social Card', function(){
                 updateSocialCard.id = card._id
                 let res;
 
-                return chai.request(app).put(`/api/social-card/${updateSocialCard.id}`).send(updateSocialCard).then(() => {
+                return chai.request(app).put(`/api/card/${updateSocialCard.id}`).send(updateSocialCard).then(() => {
                     expect(res).to.have.status(204);
                     return SocialCard.findById(updateSocialCard.id)
                 }).then(card => {
@@ -140,7 +140,7 @@ describe('API route testing for Social Card', function(){
             //     console.log('card should be here')
             //     console.log(card);
             //     let cardId = card._id
-            //     return chai.request(app).delete(`/api/social-card/${cardId}`).then(res => {
+            //     return chai.request(app).delete(`/api/card/${cardId}`).then(res => {
             //         expect(res).to.have.status(204);
             //         return SocialCard.findById(cardId);
             //     }).then(card => {

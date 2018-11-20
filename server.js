@@ -8,7 +8,6 @@ mongoose.Promise = global.Promise;
 
 const {DATABASE_URL, CLIENT_ORIGIN} = require('./config');
 const socialCardRouter = require('./router/socialCardRouter');
-const surveyRouter = require('./router/surveyRouter');
 const usersRouter = require('./users/usersRouter')
 
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
