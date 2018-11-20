@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const {DATABASE_URL} = require('./config');
 app.use(cors({
-    origin: 'https://hidden-shelf-59966.herokuapp.com/' 
+    origin: 'https://hidden-shelf-59966.herokuapp.com/ww' 
 }));
 
 app.use(function (req, res, next) {
