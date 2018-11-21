@@ -7,13 +7,6 @@ const router = express.Router();
 
 const jsonParser = bodyParser.json();
 
-// const userInfo = {
-//     first_name: "Martin",
-//     last_name: "Tirtawisata",
-//     username: "martin@email.com",
-//     password: "password",
-// };
-
 router.get('/', jsonParser, (req, res) => {
     User.find().then(user => {
         res.json(user);

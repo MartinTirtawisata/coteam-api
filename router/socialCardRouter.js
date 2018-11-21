@@ -5,18 +5,6 @@ const router = express.Router();
 const jsonParser = bodyParser.json();
 const {SocialCard} = require('../models');
 
-// Mock Data
-const socialCardInfo = {
-    first_name: "Marco",
-    last_name: "Polo",
-    job_title: "software engineer",
-    experience: "Rebelworks",
-    interest: "I like basketball and gaming",
-    personality: "Introvert",
-    skill: "React",
-    thought: "teamwork is awesome"
-}
-
 // GET socialCard
 router.get('/', jsonParser, (req, res) => {
     SocialCard.find().then(cards => {

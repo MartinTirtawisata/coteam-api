@@ -30,7 +30,6 @@ function seedSocialCardData(){
     for (let i=0; i < 5; i++){
         socialCardData.push(generateSocialCardData())
     }
-    // console.log(socialCardData);
     return SocialCard.insertMany(socialCardData);
 }
 
@@ -83,32 +82,13 @@ describe('API route testing for Social Card', function(){
                     thought: faker.lorem.sentence(),
                     created: faker.date.past()
             };
-            // console.log(newSocialCard);
             return chai.request(app).post('/api/card').send(newSocialCard).then(res => {
-
-                // console.log(res.body)
                 expect(res).to.have.status(201);
                 expect(res).to.be.json;
                 expect(res).to.be.a('object');
-                // expect(res.body).to.include.keys(['experience','interest','personality','skill','thought']);
-                // expect(res.body.first_name).to.equal(newSocialCard.first_name);
-                // expect(res.body.last_name).to.equal(newSocialCard.last_name);
-                // expect(res.body.job_title).to.equal(newSocialCard.job_title);
-                // expect(res.body.experience).to.equal(newSocialCard.experience);
-                // expect(res.body.interest).to.equal(newSocialCard.interest);
-                // expect(res.body.personality).to.equal(newSocialCard.personality);
-                // expect(res.body.skill).to.equal(newSocialCard.skill);
 
                 return SocialCard.findById(res.body._id)
-            }).then(cards => {
-                // expect(cards.first_name).to.equal(newSocialCard.first_name);
-                // expect(cards.last_name).to.equal(newSocialCard.last_name);
-                // expect(cards.job_title).to.equal(newSocialCard.job_title);
-                // expect(cards.experience).to.equal(newSocialCard.experience);
-                // expect(cards.interest).to.equal(newSocialCard.interest);
-                // expect(cards.personality).to.equal(newSocialCard.personality);
-                // expect(cards.skill).to.equal(newSocialCard.skill);
-            });
+            })
         });
     });
 
@@ -136,17 +116,17 @@ describe('API route testing for Social Card', function(){
 
     describe('DELETE endpoint for social card', function(){
         it('should delete social card and db = null', () => {
-            // SocialCard.findOne(card => {
-            //     console.log('card should be here')
-            //     console.log(card);
-            //     let cardId = card._id
-            //     return chai.request(app).delete(`/api/card/${cardId}`).then(res => {
-            //         expect(res).to.have.status(204);
-            //         return SocialCard.findById(cardId);
-            //     }).then(card => {
-            //         expect(card).to.be.null
-            //     });
-            // });
+            SocialCard.findOne(card => {
+                console.log('card should be here')
+                console.log(card);
+                let cardId = card._id
+                return chai.request(app).delete(`/api/card/${cardId}`).then(res => {
+                    expect(res).to.have.status(204);
+                    return SocialCard.findById(cardId);
+                }).then(card => {
+                    expect(card).to.be.null
+                });
+            });
         });
     });
 })

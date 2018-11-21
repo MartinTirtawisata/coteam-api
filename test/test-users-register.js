@@ -14,8 +14,6 @@ chai.use(chaiHttp);
 describe('User registration tests', function(){
     const username = "hello@email.com";
     const password = "password";
-    // const usernameInt = 1234;
-    // const passwordInt = 1234;
 
     before(function(){
         return runServer(TEST_DATABASE_URL);
@@ -47,25 +45,6 @@ describe('User registration tests', function(){
                 expect(res.body.location).to.equal('password');
             });
         });
-
-        // it('should reject users with non-string username', () => {
-        //     return chai.request(app).post('/api/users/register').send({username: 1234, password}).then(res => {
-        //         expect(res).to.have.status(422);
-        //         expect(res.body.reason).to.equal('ValidationError');
-        //         expect(res.body.message).to.equal('Incorrect field type: expected string');
-        //         expect(res.body.location).to.equal('username');
-        //     });
-        // });
-
-        // it('should reject users with non-string password', () => {
-        //     return chai.request(app).post('/api/users/register').send({username, password: 1234}).then(res => {
-        //         expect(res).to.have.status(422);
-        //         expect(res.body.reason).to.equal('ValidationError');
-        //         expect(res.body.message).to.equal('Incorrect field type: expected string');
-        //         expect(res.body.location).to.equal('password');
-        //     });
-        // });
-        
         it('should reject users with duplicate username', function(){
             return User.create({
                 username, 
