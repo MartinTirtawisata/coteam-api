@@ -1,11 +1,19 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const {DATABASE_URL} = require('./config');
+const {DATABASE_URL, CLIENT_ORIGIN, PORT} = require('./config');
+const passport = require('passport');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+const socialCardRouter = require('./router/socialCardRouter');
+const usersRouter = require('./users/usersRouter')
+const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
 
 app.use(cors({
-    origin: 'https://hidden-shelf-59966.herokuapp.com/' 
+    origin: CLIENT_ORIGIN 
 }));
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", '*');
     res.header("Access-Control-Allow-Credentials", true);
@@ -17,20 +25,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-const passport = require('passport');
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-const socialCardRouter = require('./router/socialCardRouter');
-const usersRouter = require('./users/usersRouter')
-const {router: authRouter, localStrategy, jwtStrategy} = require('./auth')
 
 passport.use(localStrategy);
 passport.use(jwtStrategy)
 app.use('/api/card', socialCardRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
-
-const PORT = 8080;
 
 let server;
 
