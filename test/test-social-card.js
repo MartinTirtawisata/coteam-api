@@ -113,20 +113,4 @@ describe('API route testing for Social Card', function(){
             });
         });
     });
-
-    describe('DELETE endpoint for social card', function(){
-        it('should delete social card and db = null', () => {
-            SocialCard.findOne(card => {
-                console.log('card should be here')
-                console.log(card);
-                let cardId = card._id
-                return chai.request(app).delete(`/api/card/${cardId}`).then(res => {
-                    expect(res).to.have.status(204);
-                    return SocialCard.findById(cardId);
-                }).then(card => {
-                    expect(card).to.be.null
-                });
-            });
-        });
-    });
 })
